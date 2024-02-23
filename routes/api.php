@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MessagesController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::shouldUse('auth0-api');
+
 Route::group(['prefix' => 'messages'], function ($router) {
     Route::get('public', [MessagesController::class, 'showPublicMessage']);
-    Route::get('protected', [MessagesController::class, 'showProtectedMessage']);
-    Route::get('admin', [MessagesController::class, 'showAdminMessage']);
+
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('protected', [MessagesController::class, 'showProtectedMessage']);
+        Route::get('admin', [MessagesController::class, 'showAdminMessage']);
+    });
 });
