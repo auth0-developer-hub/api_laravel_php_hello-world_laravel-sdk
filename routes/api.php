@@ -22,6 +22,6 @@ Route::group(['prefix' => 'messages'], function ($router) {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('protected', [MessagesController::class, 'showProtectedMessage']);
-        Route::get('admin', [MessagesController::class, 'showAdminMessage']);
+        Route::get('admin', [MessagesController::class, 'showAdminMessage'])->can('read:admin-messages');
     });
 });
